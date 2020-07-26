@@ -15,12 +15,14 @@
     "@types/node": "^14.0.26",
     "babel-jest": "^26.1.0",
     "jest": "^26.1.0",
-    "prettier": "2.0.5"
+    "prettier": "2.0.5",
+    "release-it": "^13.6.6"
   },
   "scripts": {
     "test": "jest",
     "test:watch": "jest --watch",
     "lint": "prettier --write .",
-    "prepare": "tsc"
+    "prepare": "tsc",
+    "release": "release-it"
   }
 }
