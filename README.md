@@ -41,10 +41,10 @@ const listenToEvent = () => {
 
 `addEventBusListener` has a optionnal param that allows you to configure listener:
 
-| name  |   type   | description                                                                                                     |
-| :---: | :------: | --------------------------------------------------------------------------------------------------------------- |
-| retro | boolean? | call the callback directly if the event was emitted before the listener                                         |
-| once  | boolean? | remove the callback right after beeing called. If `retro` is true, the callback is directly called and removed. |
+| name  |   type   | description                                                                                                          |
+| :---: | :------: | -------------------------------------------------------------------------------------------------------------------- |
+| retro | boolean? | directly call the callback if the event was emitted before the listener                                              |
+| once  | boolean? | remove the callback right after beeing called. If `retro` is true, the callback is directly called and then removed. |
 
 ## Emit events
 
