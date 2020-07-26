@@ -1,0 +1,25 @@
+{
+  "name": "retrobus",
+  "version": "1.0.0",
+  "description": "A bus system that allows listener to be retroactive",
+  "main": "dist/index.js",
+  "repository": "https://github.com/jcalixte/retrobus",
+  "author": "Julien Calixte <julienc@bam.tech>",
+  "license": "MIT",
+  "private": false,
+  "devDependencies": {
+    "@babel/core": "^7.10.5",
+    "@babel/preset-env": "^7.10.4",
+    "@babel/preset-typescript": "^7.10.4",
+    "@types/jest": "^26.0.7",
+    "@types/node": "^14.0.26",
+    "babel-jest": "^26.1.0",
+    "jest": "^26.1.0",
+    "prettier": "2.0.5"
+  },
+  "scripts": {
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "lint": "prettier --write ."
+  }
+}
