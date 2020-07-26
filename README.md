@@ -27,26 +27,24 @@ yarn add retrobus
 ```ts
 import { addEventBusListener } from 'retrobus'
 
-const fetchUserData = () => {
-  const fetchUserProfile = ({ isUserAuthenticated }) => {
-    if (isUserAuthenticated) {
-      console.log('user is authenticated!')
-    }
+const fetchUserProfile = ({ isUserAuthenticated }) => {
+  if (isUserAuthenticated) {
+    console.log('user is authenticated!')
   }
-
-  addEventBusListener('authenticated', fetchUserProfile, {
-    once: true,
-    retro: true
-  })
 }
+
+addEventBusListener('authenticated', fetchUserProfile, {
+  once: true,
+  retro: true
+})
 ```
 
-`addEventBusListener` has a optionnal param that allows you to configure the listener's behavior:
+`addEventBusListener` has multiple options that allow you to configure the listener's behavior:
 
-| name  |   type   | description                                                                                                          |
-| :---: | :------: | -------------------------------------------------------------------------------------------------------------------- |
-| retro | boolean? | directly call the callback if the event was emitted before the listener                                              |
-| once  | boolean? | remove the callback right after beeing called. If `retro` is true, the callback is directly called and then removed. |
+| name  |  type   | default | description                                                                                                      |
+| :---: | :-----: | :-----: | ---------------------------------------------------------------------------------------------------------------- |
+| retro | boolean |  false  | directly call the callback if the event was emitted before the listener                                          |
+| once  | boolean |  false  | remove the callback right after beeing called. If `retro` is true, the callback is directly called then removed. |
 
 ## Emit events
 
@@ -58,25 +56,23 @@ emit('authenticated', {
 })
 ```
 
-`emit` accepts any additionnal parameters
+`emit` takes any additionnal parameters after the name.
 
 ## Remove a callback
 
 ```ts
 import { addEventBusListener, removeEventBusListener } from 'retrobus'
 
-const listenToEvent = () => {
-  const fetchUserProfile = ({ isUserAuthenticated }) => {
-    if (isUserAuthenticated) {
-      console.log('user is authenticated!')
-    }
+const fetchUserProfile = ({ isUserAuthenticated }) => {
+  if (isUserAuthenticated) {
+    console.log('user is authenticated!')
   }
-
-  addEventBusListener('authenticated', fetchUserProfile, {
-    once: true,
-    retro: true
-  })
-
-  removeEventBusListener('authenticated', fetchUserProfile)
 }
+
+addEventBusListener('authenticated', fetchUserProfile, {
+  once: true,
+  retro: true
+})
+
+removeEventBusListener('authenticated', fetchUserProfile)
 ```
