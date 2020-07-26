@@ -27,19 +27,21 @@ yarn add retrobus
 ```ts
 import { addEventBusListener } from 'retrobus'
 
-const listenToEvent = () => {
-  const onDocumentReady = () => {
-    console.log('document is ready')
+const fetchUserData = () => {
+  const fetchUserProfile = ({ isUserAuthenticated }) => {
+    if (isUserAuthenticated) {
+      console.log('user is authenticated!')
+    }
   }
 
-  addEventBusListener('ready', onDocumentReady, {
+  addEventBusListener('authenticated', fetchUserProfile, {
     once: true,
     retro: true
   })
 }
 ```
 
-`addEventBusListener` has a optionnal param that allows you to configure listener:
+`addEventBusListener` has a optionnal param that allows you to configure the listener's behavior:
 
 | name  |   type   | description                                                                                                          |
 | :---: | :------: | -------------------------------------------------------------------------------------------------------------------- |
@@ -51,7 +53,7 @@ const listenToEvent = () => {
 ```ts
 import { emit } from 'retrobus'
 
-emit('ready', {
+emit('authenticated', {
   isUserAuthenticated: true
 })
 ```
@@ -64,15 +66,17 @@ emit('ready', {
 import { addEventBusListener, removeEventBusListener } from 'retrobus'
 
 const listenToEvent = () => {
-  const onDocumentReady = () => {
-    console.log('document is ready')
+  const fetchUserProfile = ({ isUserAuthenticated }) => {
+    if (isUserAuthenticated) {
+      console.log('user is authenticated!')
+    }
   }
 
-  addEventBusListener('ready', onDocumentReady, {
+  addEventBusListener('authenticated', fetchUserProfile, {
     once: true,
     retro: true
   })
 
-  removeEventBusListener('ready', onDocumentReady)
+  removeEventBusListener('authenticated', fetchUserProfile)
 }
 ```
