@@ -7,6 +7,15 @@
   "author": "Julien Calixte <julienc@bam.tech>",
   "license": "MIT",
   "private": false,
+  "keywords": [
+    "event",
+    "retroactive",
+    "bus",
+    "bus-event",
+    "emit",
+    "addListener",
+    "removeListener"
+  ],
   "devDependencies": {
     "@babel/core": "^7.10.5",
     "@babel/preset-env": "^7.10.4",

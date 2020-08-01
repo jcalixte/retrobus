@@ -1,4 +1,13 @@
+<center>
+
+<img src="docs/logo.svg" alt="logo">
+  
+![npm](https://img.shields.io/npm/v/retrobus?style=for-the-badge)
+![npm](https://img.shields.io/npm/dm/retrobus?style=for-the-badge)
+
 # Retro Bus
+
+</center>
 
 `Retrobus` is a simple event bus for your Javascript application. The extra feature is that it allows to trigger callback even if the listener is added after the event was emitted.
 
@@ -76,3 +85,7 @@ addEventBusListener('authenticated', fetchUserProfile, {
 
 removeEventBusListener('authenticated', fetchUserProfile)
 ```
+
+## Credits
+
+Logo created with [Tabler Icons](https://tablericons.com/).
