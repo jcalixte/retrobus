@@ -1,7 +1,7 @@
 {
   "name": "retrobus",
   "version": "1.0.9",
-  "description": "A bus system that allows listener to be retroactive",
+  "description": "An event bus that allows listeners to be retroactive",
   "main": "dist/index.js",
   "repository": "https://github.com/jcalixte/retrobus",
   "author": "Julien Calixte <julienc@bam.tech>",
