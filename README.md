@@ -1,4 +1,4 @@
-<center>
+<p align="center">
 
 <img src="docs/logo.svg" alt="logo">
   
@@ -7,7 +7,7 @@
 
 # Retro Bus
 
-</center>
+</p>
 
 `Retrobus` is a simple event bus for your Javascript application. The extra feature is that it allows to trigger callback even if the listener is added after the event was emitted.
 
