@@ -31,7 +31,17 @@ yarn add retrobus
 
 `Retrobus` implements 3 methods:
 
-## Listen to event
+## Emit an event
+
+```ts
+import { emit } from 'retrobus'
+
+emit('authenticated', {
+  isUserAuthenticated: true
+})
+```
+
+## Listen to an event
 
 ```ts
 import { addEventBusListener } from 'retrobus'
@@ -50,24 +60,14 @@ addEventBusListener('authenticated', fetchUserProfile, {
 
 `addEventBusListener` has multiple options that allow you to configure the listener's behavior:
 
-| name  |  type   | default | description                                                                                                      |
-| :---: | :-----: | :-----: | ---------------------------------------------------------------------------------------------------------------- |
-| retro | boolean |  false  | directly call the callback if the event was emitted before the listener                                          |
-| once  | boolean |  false  | remove the callback right after beeing called. If `retro` is true, the callback is directly called then removed. |
-
-## Emit events
-
-```ts
-import { emit } from 'retrobus'
-
-emit('authenticated', {
-  isUserAuthenticated: true
-})
-```
+| name  |  type   | default | description                                                                                                                                              |
+| :---: | :-----: | :-----: | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| retro | boolean |  false  | call retroactively the callback if the event was emitted before the listener                                                                             |
+| once  | boolean |  false  | remove the callback right after beeing called. If `retro` is true and if the event was previously emitted, the callback is directly called then removed. |
 
 `emit` takes any additionnal parameters after the name.
 
-## Remove a callback
+## Remove a listener
 
 ```ts
 import { addEventBusListener, removeEventBusListener } from 'retrobus'
