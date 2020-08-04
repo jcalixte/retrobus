@@ -2,16 +2,21 @@
 
 <img src="docs/logo.svg" alt="logo">
   
+</p>
+
 ![npm](https://img.shields.io/npm/v/retrobus?style=for-the-badge)
 ![npm](https://img.shields.io/npm/dm/retrobus?style=for-the-badge)
 
 # Retro Bus
 
-</p>
+`Retrobus` is a simple event bus for your JavaScript/TypeScript application.
 
-`Retrobus` is a simple event bus for your Javascript application. The extra feature is that it allows to trigger callback even if the listener is added after the event was emitted.
+## Features
 
-`Retrobus` is compatible with TypeScript and has no dependencies.
+- Trigger callback even if the listener is added after the event was first emitted with the property `retro`,
+- JavaScript / TypeScript,
+- Framework agnostic,
+- 0 dependencies.
 
 # Installation
 
@@ -84,6 +89,94 @@ addEventBusListener('authenticated', fetchUserProfile, {
 })
 
 removeEventBusListener('authenticated', fetchUserProfile)
+```
+
+## Add event listener examples with framework
+
+### VueJS
+
+```vue
+<template>
+  <button @click="log">Greetings!</button>
+</template>
+
+<script>
+import { addEventBusListener, emit, removeEventBusListener } from 'retrobus'
+
+export default {
+  name: 'HelloWorld',
+  mounted() {
+    addEventBusListener('log', this.greetings)
+  },
+  beforeDestroy() {
+    removeEventBusListener('log', this.greetings)
+  },
+  methods: {
+    greetings() {
+      console.log('Hello world!')
+    },
+    log() {
+      emit('log')
+    }
+  }
+}
+</script>
+```
+
+### React
+
+```jsx
+import { addEventBusListener, emit, removeEventBusListener } from 'retrobus'
+
+const HelloWorld = () => {
+  useEffect(() => {
+    const greetings = () => console.log('Hello World')
+
+    addEventBusListener('log', greetings)
+
+    return () => {
+      removeEventBusListener('log', greetings)
+    }
+  }, [])
+
+  return <button onClick={() => emit('log')}>Greetings!</button>
+}
+```
+
+### Angular
+
+```ts
+// content.component.ts
+import { Component, OnDestroy } from '@angular/core'
+import { addEventBusListener, emit, removeEventBusListener } from 'retrobus'
+
+@Component({
+  selector: 'app-content',
+  templateUrl: 'content.component.html',
+  styleUrls: ['content.component.scss']
+})
+export class ContentComponent implements OnDestroy {
+  constructor() {
+    addEventBusListener('log', this.greetings)
+  }
+
+  ngOnDestroy() {
+    removeEventBusListener('log', this.greetings)
+  }
+
+  greetings() {
+    console.log('Hello World')
+  }
+
+  log() {
+    emit('log')
+  }
+}
+```
+
+```html
+<!-- content.component.html -->
+<button (click)="log()">Greetings!</button>
 ```
 
 ## Credits

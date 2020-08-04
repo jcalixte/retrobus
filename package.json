@@ -3,6 +3,7 @@
   "version": "1.0.9",
   "description": "An event bus that allows listeners to be retroactive",
   "main": "dist/index.js",
+  "types": "dist/index.d.ts",
   "repository": "https://github.com/jcalixte/retrobus",
   "author": "Julien Calixte <julienc@bam.tech>",
   "license": "MIT",
