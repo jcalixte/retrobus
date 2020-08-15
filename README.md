@@ -36,7 +36,7 @@ yarn add retrobus
 
 # Usage
 
-`Retrobus` implements 3 methods:
+`Retrobus` implements 4 methods:
 
 ## Emit an event
 
@@ -91,6 +91,26 @@ addEventBusListener('authenticated', fetchUserProfile, {
 })
 
 removeEventBusListener('authenticated', fetchUserProfile)
+```
+
+## Clear listeners
+
+```ts
+import { addEventBusListener, clearEventBusListeners } from 'retrobus'
+
+const fetchUserProfile = ({ isUserAuthenticated }) => {
+  if (isUserAuthenticated) {
+    console.log('user is authenticated!')
+  }
+}
+
+addEventBusListener('authenticated', fetchUserProfile, {
+  once: true,
+  retro: true
+})
+
+clearEventBusListeners('authenticated')
+clearEventBusListeners() // clear all event listeners
 ```
 
 ## Add event listener examples with framework
