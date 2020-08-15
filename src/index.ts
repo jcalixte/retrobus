@@ -25,20 +25,20 @@ export const addEventBusListener = (
   const calls = callbacks.get(name)
 
   if (options.retro && emittedEvents.has(name)) {
-    const args = emittedEvents.get(name)
-    callback(...(args ?? []))
+    const args = emittedEvents.get(name) as unknown[]
+    callback(...args)
 
     if (options.once) {
       return
     }
   }
 
-  const params = { callback, ...options }
+  const newCallback = { callback, ...options }
 
   if (!calls) {
-    callbacks.set(name, [params])
+    callbacks.set(name, [newCallback])
   } else {
-    callbacks.set(name, [...calls, params])
+    callbacks.set(name, [...calls, newCallback])
   }
 }
 
@@ -55,6 +55,14 @@ export const removeEventBusListener = (name: string, callback: Callback) => {
   )
 }
 
+export const clearEventBusListener = (name?: string) => {
+  if (name === undefined) {
+    callbacks.clear()
+    return
+  }
+  callbacks.delete(name)
+}
+
 export const emit = (name: string, ...args: unknown[]) => {
   const calls = callbacks.get(name)
 
@@ -63,7 +71,7 @@ export const emit = (name: string, ...args: unknown[]) => {
   }
 
   calls.map((call) => call.callback(...args))
-  emittedEvents.set(name, args || [])
+  emittedEvents.set(name, args)
   callbacks.set(
     name,
     calls.filter((call) => !call.once)
