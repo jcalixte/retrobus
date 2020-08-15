@@ -8,6 +8,27 @@
   "author": "Julien Calixte <julienc@bam.tech>",
   "license": "MIT",
   "private": false,
+  "scripts": {
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "lint": "prettier --write .",
+    "prepare": "tsc",
+    "release": "release-it",
+    "coveralls": "jest --coverage && coveralls < coverage/lcov.info && rm -rf coverage"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.10.5",
+    "@babel/preset-env": "^7.10.4",
+    "@babel/preset-typescript": "^7.10.4",
+    "@types/jest": "^26.0.7",
+    "@types/node": "^14.0.26",
+    "babel-jest": "^26.1.0",
+    "coveralls": "^3.1.0",
+    "jest": "^26.1.0",
+    "prettier": "2.0.5",
+    "release-it": "^13.6.6",
+    "typescript": "^3.9.7"
+  },
   "keywords": [
     "event",
     "retroactive",
@@ -16,23 +37,5 @@
     "emit",
     "addListener",
     "removeListener"
-  ],
-  "devDependencies": {
-    "@babel/core": "^7.10.5",
-    "@babel/preset-env": "^7.10.4",
-    "@babel/preset-typescript": "^7.10.4",
-    "@types/jest": "^26.0.7",
-    "@types/node": "^14.0.26",
-    "babel-jest": "^26.1.0",
-    "jest": "^26.1.0",
-    "prettier": "2.0.5",
-    "release-it": "^13.6.6"
-  },
-  "scripts": {
-    "test": "jest",
-    "test:watch": "jest --watch",
-    "lint": "prettier --write .",
-    "prepare": "tsc",
-    "release": "release-it"
-  }
+  ]
 }

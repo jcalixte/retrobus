@@ -1,2 +1,5 @@
 docs/
+tests/
+coverage/
 .vscode/
+yarn-error.log

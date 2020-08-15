@@ -1,4 +1,7 @@
 dist
+tests
+coverage
 node_modules
 tsconfig.tsbuildinfo
 .vscode
+yarn-error.log
