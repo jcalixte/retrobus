@@ -1,13 +1,26 @@
-import { addEventBusListener, emit, removeEventBusListener } from './index'
+import {
+  addEventBusListener,
+  clearEventBusListener,
+  emit,
+  removeEventBusListener
+} from './index'
 
 describe('event bus', () => {
+  beforeEach(() => {
+    clearEventBusListener()
+  })
+
   it('calls a callback listener', () => {
-    const callback = jest.fn()
-    addEventBusListener('on-test', callback)
+    const callback1 = jest.fn()
+    const callback2 = jest.fn()
+
+    addEventBusListener('on-test', callback1)
+    addEventBusListener('on-test', callback2)
 
     emit('on-test')
 
-    expect(callback).toHaveBeenCalled()
+    expect(callback1).toHaveBeenCalled()
+    expect(callback2).toHaveBeenCalled()
   })
 
   it('calls a callback listener with args', () => {
@@ -84,6 +97,20 @@ describe('event bus', () => {
     expect(callback).toHaveBeenCalledTimes(1)
   })
 
+  it('does nothing when removing before adding', () => {
+    const callback = jest.fn()
+    removeEventBusListener('on-test', callback)
+
+    addEventBusListener('on-test', callback)
+
+    emit('on-test')
+    removeEventBusListener('on-test', callback)
+
+    emit('on-test')
+
+    expect(callback).toHaveBeenCalledTimes(1)
+  })
+
   it('removes the listening callback', () => {
     const callback = jest.fn()
 
@@ -95,5 +122,33 @@ describe('event bus', () => {
     emit('on-test')
 
     expect(callback).toHaveBeenCalledTimes(1)
+  })
+
+  it('clears listeners', () => {
+    const callback = jest.fn()
+
+    addEventBusListener('on-test', callback)
+
+    clearEventBusListener('on-test')
+
+    emit('on-test')
+
+    expect(callback).not.toHaveBeenCalled()
+  })
+
+  it('clears everything', () => {
+    const callback1 = jest.fn()
+    const callback2 = jest.fn()
+
+    addEventBusListener('on-test-1', callback1)
+    addEventBusListener('on-test-2', callback2)
+
+    clearEventBusListener()
+
+    emit('on-test-1')
+    emit('on-test-2')
+
+    expect(callback1).not.toHaveBeenCalled()
+    expect(callback2).not.toHaveBeenCalled()
   })
 })
