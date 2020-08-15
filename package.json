@@ -10,11 +10,12 @@
   "private": false,
   "scripts": {
     "test": "jest",
+    "test:coverage": "jest --coverage && rm -rf coverage",
     "test:watch": "jest --watch",
+    "coveralls": "jest --coverage && coveralls < coverage/lcov.info && rm -rf coverage",
     "lint": "prettier --write .",
     "prepare": "tsc",
-    "release": "release-it",
-    "coveralls": "jest --coverage && coveralls < coverage/lcov.info && rm -rf coverage"
+    "release": "release-it"
   },
   "devDependencies": {
     "@babel/core": "^7.10.5",
