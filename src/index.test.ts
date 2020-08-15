@@ -1,13 +1,13 @@
 import {
   addEventBusListener,
-  clearEventBusListener,
+  clearEventBusListeners,
   emit,
   removeEventBusListener
 } from './index'
 
 describe('event bus', () => {
   beforeEach(() => {
-    clearEventBusListener()
+    clearEventBusListeners()
   })
 
   it('calls a callback listener', () => {
@@ -129,7 +129,7 @@ describe('event bus', () => {
 
     addEventBusListener('on-test', callback)
 
-    clearEventBusListener('on-test')
+    clearEventBusListeners('on-test')
 
     emit('on-test')
 
@@ -143,7 +143,7 @@ describe('event bus', () => {
     addEventBusListener('on-test-1', callback1)
     addEventBusListener('on-test-2', callback2)
 
-    clearEventBusListener()
+    clearEventBusListeners()
 
     emit('on-test-1')
     emit('on-test-2')

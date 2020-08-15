@@ -55,7 +55,7 @@ export const removeEventBusListener = (name: string, callback: Callback) => {
   )
 }
 
-export const clearEventBusListener = (name?: string) => {
+export const clearEventBusListeners = (name?: string) => {
   if (name === undefined) {
     callbacks.clear()
     return
