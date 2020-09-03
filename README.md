@@ -75,6 +75,8 @@ addEventBusListener('authenticated', fetchUserProfile, {
 | retro | boolean |  false  | call retroactively the callback if the event was emitted before the listener                                                                             |
 | once  | boolean |  false  | remove the callback right after beeing called. If `retro` is true and if the event was previously emitted, the callback is directly called then removed. |
 
+it returns a callback to unsubscribe the listener.
+
 `emit` takes any additionnal parameters after the name.
 
 ## Remove a listener
@@ -151,17 +153,13 @@ export default {
 ### React
 
 ```jsx
-import { addEventBusListener, emit, removeEventBusListener } from 'retrobus'
+import { addEventBusListener, emit } from 'retrobus'
 
 const HelloWorld = () => {
   useEffect(() => {
     const greetings = () => console.log('Hello World')
 
-    addEventBusListener('log', greetings)
-
-    return () => {
-      removeEventBusListener('log', greetings)
-    }
+    return addEventBusListener('log', greetings)
   }, [])
 
   return <button onClick={() => emit('log')}>Greetings!</button>
