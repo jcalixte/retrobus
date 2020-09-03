@@ -4,6 +4,7 @@ import {
   emit,
   removeEventBusListener
 } from './index'
+import { cpuUsage } from 'process'
 
 describe('event bus', () => {
   beforeEach(() => {
@@ -150,5 +151,16 @@ describe('event bus', () => {
 
     expect(callback1).not.toHaveBeenCalled()
     expect(callback2).not.toHaveBeenCalled()
+  })
+
+  it('removes event bus on call the return callback', () => {
+    const callback = jest.fn()
+
+    const unsubscribe = addEventBusListener('on-test', callback)
+
+    emit('on-test')
+    unsubscribe()
+    emit('on-test')
+    expect(callback).toHaveBeenCalledTimes(1)
   })
 })

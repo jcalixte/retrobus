@@ -21,7 +21,8 @@ export const addEventBusListener = (
   name: string,
   callback: Callback,
   options: Options = defaultOptions
-) => {
+): (() => void) => {
+  const unsubscribe = () => removeEventBusListener(name, callback)
   const calls = callbacks.get(name)
 
   if (options.retro && emittedEvents.has(name)) {
@@ -29,7 +30,7 @@ export const addEventBusListener = (
     callback(...args)
 
     if (options.once) {
-      return
+      return unsubscribe
     }
   }
 
@@ -40,6 +41,8 @@ export const addEventBusListener = (
   } else {
     callbacks.set(name, [...calls, newCallback])
   }
+
+  return unsubscribe
 }
 
 export const removeEventBusListener = (name: string, callback: Callback) => {
