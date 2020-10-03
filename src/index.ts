@@ -1,4 +1,4 @@
-type Callback = (...args: unknown[]) => void
+type Callback = (...args: any[]) => void
 
 interface Options {
   retro?: boolean
@@ -9,7 +9,7 @@ interface Params extends Options {
   callback: Callback
 }
 
-const emittedEvents: Map<string, unknown[]> = new Map()
+const emittedEvents: Map<string, any[]> = new Map()
 const callbacks: Map<string, Params[]> = new Map()
 
 const defaultOptions: Options = {
@@ -26,7 +26,7 @@ export const addEventBusListener = (
   const calls = callbacks.get(name)
 
   if (options.retro && emittedEvents.has(name)) {
-    const args = emittedEvents.get(name) as unknown[]
+    const args = emittedEvents.get(name) as any[]
     callback(...args)
 
     if (options.once) {
@@ -66,7 +66,7 @@ export const clearEventBusListeners = (name?: string) => {
   callbacks.delete(name)
 }
 
-export const emit = (name: string, ...args: unknown[]) => {
+export const emit = (name: string, ...args: any[]) => {
   const calls = callbacks.get(name)
 
   if (!calls) {
