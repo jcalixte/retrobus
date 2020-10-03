@@ -43,7 +43,7 @@ describe('event bus', () => {
     expect(callback).not.toHaveBeenCalled()
   })
 
-  it('calls a callback retroactively if the listener is added to late', () => {
+  it('calls a callback retroactively if the listener is added too late', () => {
     const callback = jest.fn()
 
     emit('on-test')
