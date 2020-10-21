@@ -3,6 +3,7 @@ type Callback = (...args: any[]) => void
 interface Options {
   retro?: boolean
   once?: boolean
+  unique?: boolean
 }
 
 interface Params extends Options {
@@ -14,7 +15,8 @@ const callbacks: Map<string, Params[]> = new Map()
 
 const defaultOptions: Options = {
   retro: false,
-  once: false
+  once: false,
+  unique: false
 }
 
 export const addEventBusListener = (
@@ -38,9 +40,14 @@ export const addEventBusListener = (
 
   if (!calls) {
     callbacks.set(name, [newCallback])
-  } else {
-    callbacks.set(name, [...calls, newCallback])
+    return unsubscribe
   }
+
+  if (options.unique && calls.find((c) => c.callback === callback)) {
+    return unsubscribe
+  }
+
+  callbacks.set(name, [...calls, newCallback])
 
   return unsubscribe
 }
