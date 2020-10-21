@@ -51,6 +51,9 @@ emit('authenticated', {
 })
 ```
 
+`emit` takes any additionnal parameters after the name.
+Theses parameters will be passed to the listener callbacks.
+
 ## Listen to an event
 
 ```ts
@@ -75,9 +78,7 @@ addEventBusListener('authenticated', fetchUserProfile, {
 | retro | boolean |  false  | call retroactively the callback if the event was emitted before the listener                                                                             |
 | once  | boolean |  false  | remove the callback right after beeing called. If `retro` is true and if the event was previously emitted, the callback is directly called then removed. |
 
-it returns a callback to unsubscribe the listener.
-
-`emit` takes any additionnal parameters after the name.
+`addEventBusListener` returns a callback to directly unsubscribe the listener added.
 
 ## Remove a listener
 
