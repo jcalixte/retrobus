@@ -73,10 +73,11 @@ addEventBusListener('authenticated', fetchUserProfile, {
 
 `addEventBusListener` has multiple options that allow you to configure the listener's behavior:
 
-| name  |  type   | default | description                                                                                                                                              |
-| :---: | :-----: | :-----: | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| retro | boolean |  false  | call retroactively the callback if the event was emitted before the listener                                                                             |
-| once  | boolean |  false  | remove the callback right after beeing called. If `retro` is true and if the event was previously emitted, the callback is directly called then removed. |
+|  name  |  type   | default | description                                                                                                                                              |
+| :----: | :-----: | :-----: | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| retro  | boolean |  false  | call retroactively the callback if the event was emitted before the listener                                                                             |
+|  once  | boolean |  false  | remove the callback right after beeing called. If `retro` is true and if the event was previously emitted, the callback is directly called then removed. |
+| unique | boolean |  false  | make sure the callback is only added once                                                                                                                |
 
 `addEventBusListener` returns a callback to directly unsubscribe the listener added.
 
@@ -93,7 +94,8 @@ const fetchUserProfile = ({ isUserAuthenticated }) => {
 
 addEventBusListener('authenticated', fetchUserProfile, {
   once: true,
-  retro: true
+  retro: true,
+  unique: true
 })
 
 removeEventBusListener('authenticated', fetchUserProfile)
