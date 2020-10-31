@@ -156,16 +156,13 @@ export default {
 ### React
 
 ```jsx
-import { addEventBusListener, emit, removeEventBusListener } from 'retrobus'
+import { addEventBusListener, emit } from 'retrobus'
 
 const HelloWorld = () => {
   useEffect(() => {
     const greetings = () => console.log('Hello World')
-    addEventBusListener('log', greetings)
 
-    return () => {
-      removeEventBusListener('log', greetings)
-    }
+    return addEventBusListener('log', greetings)
   }, [])
 
   return <button onClick={() => emit('log')}>Greetings!</button>

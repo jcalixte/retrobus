@@ -1,8 +1,21 @@
 type Callback = (...args: any[]) => void
 
 interface Options {
+  /**
+   * Call retroactively the callback if the event
+   * was emitted before the listener
+   */
   retro?: boolean
+  /**
+   * Remove the callback right after beeing called.
+   * If `retro` is true and if the event was
+   * previously emitted, the callback is directly
+   * called then removed.
+   */
   once?: boolean
+  /**
+   * Make sure the callback is only added once.
+   */
   unique?: boolean
 }
 
@@ -19,6 +32,12 @@ const defaultOptions: Options = {
   unique: false
 }
 
+/**
+ * Add an listener to a specific event.
+ * @param {string} name name of the event
+ * @param {Callback} callback the method who will be called when the event is emitted.
+ * @param {Options} options option parameters to change callback behavior
+ */
 export const addEventBusListener = (
   name: string,
   callback: Callback,
@@ -52,6 +71,11 @@ export const addEventBusListener = (
   return unsubscribe
 }
 
+/**
+ * Remove a callback to be called when event is emitted.
+ * @param {string} name name of the event.
+ * @param {Callback} callback callback you don't want anymore to trigger when event is emitted.
+ */
 export const removeEventBusListener = (name: string, callback: Callback) => {
   const calls = callbacks.get(name)
 
@@ -65,6 +89,10 @@ export const removeEventBusListener = (name: string, callback: Callback) => {
   )
 }
 
+/**
+ * Clear all listeners from an event.
+ * @param {string} name event name you want to clear all its listeners.
+ */
 export const clearEventBusListeners = (name?: string) => {
   if (name === undefined) {
     callbacks.clear()
@@ -73,6 +101,11 @@ export const clearEventBusListeners = (name?: string) => {
   callbacks.delete(name)
 }
 
+/**
+ * Emit an event.
+ * @param {string} name name of the event to emit.
+ * @param {any[]} args arguments to be passed to all listeners.
+ */
 export const emit = (name: string, ...args: any[]) => {
   const calls = callbacks.get(name)
 
