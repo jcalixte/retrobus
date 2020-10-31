@@ -7,7 +7,7 @@ interface Options {
    */
   retro?: boolean
   /**
-   * Remove the callback right after beeing called.
+   * Remove the callback right after being called.
    * If `retro` is true and if the event was
    * previously emitted, the callback is directly
    * called then removed.
@@ -33,7 +33,7 @@ const defaultOptions: Options = {
 }
 
 /**
- * Add an listener to a specific event.
+ * Add a listener to a specific event.
  * @param name name of the event
  * @param callback the method who will be called when the event is emitted.
  * @param options option parameters to change callback behavior
