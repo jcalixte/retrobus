@@ -34,9 +34,9 @@ const defaultOptions: Options = {
 
 /**
  * Add an listener to a specific event.
- * @param {string} name name of the event
- * @param {Callback} callback the method who will be called when the event is emitted.
- * @param {Options} options option parameters to change callback behavior
+ * @param name name of the event
+ * @param callback the method who will be called when the event is emitted.
+ * @param options option parameters to change callback behavior
  */
 export const addEventBusListener = (
   name: string,
@@ -73,8 +73,8 @@ export const addEventBusListener = (
 
 /**
  * Remove a callback to be called when event is emitted.
- * @param {string} name name of the event.
- * @param {Callback} callback callback you don't want anymore to trigger when event is emitted.
+ * @param name name of the event.
+ * @param callback callback you don't want anymore to trigger when event is emitted.
  */
 export const removeEventBusListener = (name: string, callback: Callback) => {
   const calls = callbacks.get(name)
@@ -91,7 +91,7 @@ export const removeEventBusListener = (name: string, callback: Callback) => {
 
 /**
  * Clear all listeners from an event.
- * @param {string} name event name you want to clear all its listeners.
+ * @param name event name you want to clear all its listeners.
  */
 export const clearEventBusListeners = (name?: string) => {
   if (name === undefined) {
@@ -103,8 +103,8 @@ export const clearEventBusListeners = (name?: string) => {
 
 /**
  * Emit an event.
- * @param {string} name name of the event to emit.
- * @param {any[]} args arguments to be passed to all listeners.
+ * @param name name of the event to emit.
+ * @param]} args arguments to be passed to all listeners.
  */
 export const emit = (name: string, ...args: any[]) => {
   const calls = callbacks.get(name)

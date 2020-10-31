@@ -32,7 +32,7 @@ describe('event bus', () => {
     expect(callback).toHaveBeenCalledWith(...args)
   })
 
-  it("doesn't call a callback if the listener is added to late", () => {
+  it("doesn't call a callback if the listener is added too late", () => {
     const callback = jest.fn()
 
     emit('on-test')
