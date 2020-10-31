@@ -24,7 +24,7 @@ interface Params extends Options {
 }
 
 const emittedEvents: Map<string, any[]> = new Map()
-const callbacks: Map<string, Params[]> = new Map()
+const eventListeners: Map<string, Params[]> = new Map()
 
 const defaultOptions: Options = {
   retro: false,
@@ -44,7 +44,7 @@ export const addEventBusListener = (
   options: Options = defaultOptions
 ): (() => void) => {
   const unsubscribe = () => removeEventBusListener(name, callback)
-  const calls = callbacks.get(name)
+  const listeners = eventListeners.get(name)
 
   if (options.retro && emittedEvents.has(name)) {
     const args = emittedEvents.get(name) as any[]
@@ -55,18 +55,18 @@ export const addEventBusListener = (
     }
   }
 
-  const newCallback = { callback, ...options }
+  const listener = { callback, ...options }
 
-  if (!calls) {
-    callbacks.set(name, [newCallback])
+  if (!listeners) {
+    eventListeners.set(name, [listener])
     return unsubscribe
   }
 
-  if (options.unique && calls.find((c) => c.callback === callback)) {
+  if (options.unique && listeners.find((c) => c.callback === callback)) {
     return unsubscribe
   }
 
-  callbacks.set(name, [...calls, newCallback])
+  eventListeners.set(name, [...listeners, listener])
 
   return unsubscribe
 }
@@ -77,13 +77,13 @@ export const addEventBusListener = (
  * @param callback callback you don't want anymore to trigger when event is emitted.
  */
 export const removeEventBusListener = (name: string, callback: Callback) => {
-  const calls = callbacks.get(name)
+  const calls = eventListeners.get(name)
 
   if (!calls) {
     return
   }
 
-  callbacks.set(
+  eventListeners.set(
     name,
     calls.filter((call) => call.callback !== callback)
   )
@@ -91,14 +91,14 @@ export const removeEventBusListener = (name: string, callback: Callback) => {
 
 /**
  * Clear all listeners from an event.
- * @param name event name you want to clear all its listeners.
+ * @param name event name to clear all its listeners.
  */
 export const clearEventBusListeners = (name?: string) => {
   if (name === undefined) {
-    callbacks.clear()
+    eventListeners.clear()
     return
   }
-  callbacks.delete(name)
+  eventListeners.delete(name)
 }
 
 /**
@@ -107,16 +107,16 @@ export const clearEventBusListeners = (name?: string) => {
  * @param]} args arguments to be passed to all listeners.
  */
 export const emit = (name: string, ...args: any[]) => {
-  const calls = callbacks.get(name)
+  const listeners = eventListeners.get(name)
 
-  if (!calls) {
+  if (!listeners) {
     return
   }
 
-  calls.map((call) => call.callback(...args))
+  listeners.map((call) => call.callback(...args))
   emittedEvents.set(name, args)
-  callbacks.set(
+  eventListeners.set(
     name,
-    calls.filter((call) => !call.once)
+    listeners.filter((call) => !call.once)
   )
 }
