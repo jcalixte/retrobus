@@ -109,12 +109,13 @@ export const clearEventBusListeners = (name?: string) => {
 export const emit = (name: string, ...args: any[]) => {
   const listeners = eventListeners.get(name)
 
+  emittedEvents.set(name, args)
+
   if (!listeners) {
     return
   }
 
   listeners.map((call) => call.callback(...args))
-  emittedEvents.set(name, args)
   eventListeners.set(
     name,
     listeners.filter((call) => !call.once)

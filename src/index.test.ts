@@ -14,10 +14,10 @@ describe('event bus', () => {
     const callback1 = jest.fn()
     const callback2 = jest.fn()
 
-    addEventBusListener('on-test', callback1)
-    addEventBusListener('on-test', callback2)
+    addEventBusListener('on-test-callback-listener', callback1)
+    addEventBusListener('on-test-callback-listener', callback2)
 
-    emit('on-test')
+    emit('on-test-callback-listener')
 
     expect(callback1).toHaveBeenCalled()
     expect(callback2).toHaveBeenCalled()
@@ -26,8 +26,8 @@ describe('event bus', () => {
   it('calls a callback listener with args', () => {
     const callback = jest.fn()
     const args = [1, 'test', true]
-    addEventBusListener('on-test', callback)
-    emit('on-test', ...args)
+    addEventBusListener('on-test-callback-listener-with-args', callback)
+    emit('on-test-callback-listener-with-args', ...args)
 
     expect(callback).toHaveBeenCalledWith(...args)
   })
@@ -35,9 +35,9 @@ describe('event bus', () => {
   it("doesn't call a callback if the listener is added too late", () => {
     const callback = jest.fn()
 
-    emit('on-test')
+    emit('on-test-too-late')
 
-    addEventBusListener('on-test', callback)
+    addEventBusListener('on-test-too-late', callback)
 
     expect(callback).not.toHaveBeenCalled()
   })
@@ -45,26 +45,26 @@ describe('event bus', () => {
   it('calls a callback retroactively if the listener is added too late', () => {
     const callback = jest.fn()
 
-    emit('on-test')
+    emit('on-test-retro-too-late', 1234567)
 
-    addEventBusListener('on-test', callback, {
+    addEventBusListener('on-test-retro-too-late', callback, {
       retro: true
     })
 
-    expect(callback).toHaveBeenCalled()
+    expect(callback).toHaveBeenCalledWith(1234567)
   })
 
   it('calls a callback multiple times', () => {
     const callback = jest.fn()
 
-    emit('on-test')
+    emit('on-test-multiple-times')
 
-    addEventBusListener('on-test', callback, {
+    addEventBusListener('on-test-multiple-times', callback, {
       retro: true
     })
 
-    emit('on-test')
-    emit('on-test')
+    emit('on-test-multiple-times')
+    emit('on-test-multiple-times')
 
     expect(callback).toHaveBeenCalledTimes(3)
   })
@@ -72,12 +72,12 @@ describe('event bus', () => {
   it('calls a one time callback only once', () => {
     const callback = jest.fn()
 
-    addEventBusListener('on-test', callback, {
+    addEventBusListener('on-test-once', callback, {
       once: true
     })
 
-    emit('on-test')
-    emit('on-test')
+    emit('on-test-once')
+    emit('on-test-once')
 
     expect(callback).toHaveBeenCalledTimes(1)
   })
@@ -85,28 +85,28 @@ describe('event bus', () => {
   it('calls a one time callback retroactively only once', () => {
     const callback = jest.fn()
 
-    emit('on-test')
+    emit('on-test-retro-once')
 
-    addEventBusListener('on-test', callback, {
+    addEventBusListener('on-test-retro-once', callback, {
       once: true,
       retro: true
     })
 
-    emit('on-test')
+    emit('on-test-retro-once')
 
     expect(callback).toHaveBeenCalledTimes(1)
   })
 
   it('does nothing when removing before adding', () => {
     const callback = jest.fn()
-    removeEventBusListener('on-test', callback)
+    removeEventBusListener('on-test-remove-before-add', callback)
 
-    addEventBusListener('on-test', callback)
+    addEventBusListener('on-test-remove-before-add', callback)
 
-    emit('on-test')
-    removeEventBusListener('on-test', callback)
+    emit('on-test-remove-before-add')
+    removeEventBusListener('on-test-remove-before-add', callback)
 
-    emit('on-test')
+    emit('on-test-remove-before-add')
 
     expect(callback).toHaveBeenCalledTimes(1)
   })
@@ -114,12 +114,12 @@ describe('event bus', () => {
   it('removes the listening callback', () => {
     const callback = jest.fn()
 
-    addEventBusListener('on-test', callback)
+    addEventBusListener('on-test-remove-callback', callback)
 
-    emit('on-test')
-    removeEventBusListener('on-test', callback)
+    emit('on-test-remove-callback')
+    removeEventBusListener('on-test-remove-callback', callback)
 
-    emit('on-test')
+    emit('on-test-remove-callback')
 
     expect(callback).toHaveBeenCalledTimes(1)
   })
@@ -127,11 +127,11 @@ describe('event bus', () => {
   it('clears listeners', () => {
     const callback = jest.fn()
 
-    addEventBusListener('on-test', callback)
+    addEventBusListener('on-test-clear-listeners', callback)
 
-    clearEventBusListeners('on-test')
+    clearEventBusListeners('on-test-clear-listeners')
 
-    emit('on-test')
+    emit('on-test-clear-listeners')
 
     expect(callback).not.toHaveBeenCalled()
   })
@@ -155,21 +155,21 @@ describe('event bus', () => {
   it('removes event bus on call the return callback', () => {
     const callback = jest.fn()
 
-    const unsubscribe = addEventBusListener('on-test', callback)
+    const unsubscribe = addEventBusListener('on-test-remove-with-callback', callback)
 
-    emit('on-test')
+    emit('on-test-remove-with-callback')
     unsubscribe()
-    emit('on-test')
+    emit('on-test-remove-with-callback')
     expect(callback).toHaveBeenCalledTimes(1)
   })
 
   it('calls only once a unique callback', () => {
     const callback = jest.fn()
 
-    addEventBusListener('on-test', callback, { unique: true })
-    addEventBusListener('on-test', callback, { unique: true })
+    addEventBusListener('on-test-unique', callback, { unique: true })
+    addEventBusListener('on-test-unique', callback, { unique: true })
 
-    emit('on-test')
+    emit('on-test-unique')
 
     expect(callback).toHaveBeenCalledTimes(1)
   })
