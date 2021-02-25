@@ -54,6 +54,18 @@ describe('event bus', () => {
     expect(callback).toHaveBeenCalledWith(1234567)
   })
 
+  it('calls a callback retroactively if the listener is added too late without args', () => {
+    const callback = jest.fn()
+
+    emit('on-test-retro-too-late-without-args')
+
+    addEventBusListener('on-test-retro-too-late-without-args', callback, {
+      retro: true
+    })
+
+    expect(callback).toHaveBeenCalledWith()
+  })
+
   it('calls a callback multiple times', () => {
     const callback = jest.fn()
 
@@ -180,6 +192,7 @@ describe('event bus', () => {
   it('calls every event emitted from the beginning with retroStrategy to "all"', () => {
     const callback = jest.fn()
 
+    emit('on-test-retro-strategy-all')
     emit('on-test-retro-strategy-all', { first: true })
     emit('on-test-retro-strategy-all', { second: true })
 
@@ -188,7 +201,8 @@ describe('event bus', () => {
       retroStrategy: 'all'
     })
 
-    expect(callback).toHaveBeenCalledTimes(2)
+    expect(callback).toHaveBeenCalledTimes(3)
+    expect(callback).toHaveBeenCalledWith()
     expect(callback).toHaveBeenCalledWith({
       first: true
     })

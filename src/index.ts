@@ -59,7 +59,7 @@ export const addEventBusListener = (
   const listeners = eventListeners.get(name)
 
   if (options.retro && emittedEvents.has(name)) {
-    const emittedEventArgs = emittedEvents.get(name) as any[][]
+    const emittedEventArgs = emittedEvents.get(name)!
     switch (options.retroStrategy) {
       case 'all': {
         for (const args of emittedEventArgs) {
@@ -71,9 +71,7 @@ export const addEventBusListener = (
       default: {
         const args = emittedEventArgs[emittedEventArgs.length - 1]
 
-        if (args) {
-          callback(...args)
-        }
+        callback(...args)
         break
       }
     }
@@ -138,7 +136,7 @@ export const emit = (name: string, ...args: any[]) => {
   const listeners = eventListeners.get(name)
 
   if (emittedEvents.has(name)) {
-    const emittedEventArgs = emittedEvents.get(name) as any[][]
+    const emittedEventArgs = emittedEvents.get(name)!
     emittedEvents.set(name, [...emittedEventArgs, args])
   } else {
     emittedEvents.set(name, [args])
