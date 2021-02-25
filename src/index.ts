@@ -7,19 +7,19 @@ interface Options {
    */
   retro?: boolean
   /**
-   * Set the strategy on calling previous emitted
+   * Define the strategy when calling previous emitted
    * events.
-   * If retroStrategy is set to 'all', every emitted
+   * If `retroStrategy` is set to `all`, every emitted
    * events will be called, from oldest to newest.
-   * If retroStrategy is set to 'last-one', only the
+   * If `retroStrategy` is set to `last-one`, only the
    * last emitted event will be retractively called.
-   * Default to 'last-one'.
-   * Ignored if retro is false.
+   * Default to `last-one`.
+   * Ignored if `retro` is `false`.
    */
   retroStrategy?: 'last-one' | 'all'
   /**
    * Remove the callback right after being called.
-   * If `retro` is true and if the event was
+   * If `retro` is `true` and if the event was
    * previously emitted, the callback is directly
    * called then removed.
    */

@@ -73,11 +73,12 @@ addEventBusListener('authenticated', fetchUserProfile, {
 
 `addEventBusListener` has multiple options that allow you to configure the listener's behavior:
 
-|  name  |  type   | default | description                                                                                                                                              |
-| :----: | :-----: | :-----: | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| retro  | boolean |  false  | call retroactively the callback if the event was emitted before the listener                                                                             |
-|  once  | boolean |  false  | remove the callback right after beeing called. If `retro` is true and if the event was previously emitted, the callback is directly called then removed. |
-| unique | boolean |  false  | make sure the callback is only added once                                                                                                                |
+|     name      |        type         |  default   | description                                                                                                                                                                                                                                                                                                       |
+| :-----------: | :-----------------: | :--------: | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+|     retro     |       boolean       |   false    | call retroactively the callback if the event was emitted before the listener                                                                                                                                                                                                                                      |
+| retroStrategy | 'last-one' \| 'all' | 'last-one' | Define the strategy when calling previous emitted events. If `retroStrategy` is set to `all`, every emitted events will be called, from oldest to newest. If `retroStrategy` is set to `last-one`, only the last emitted event will be retractively called. Default to `last-one`. Ignored if `retro` is `false`. |
+|     once      |       boolean       |   false    | remove the callback right after beeing called. If `retro` is true and if the event was previously emitted, the callback is directly called then removed.                                                                                                                                                          |
+|    unique     |       boolean       |   false    | make sure the callback is only added once                                                                                                                                                                                                                                                                         |
 
 `addEventBusListener` returns a callback to directly unsubscribe the listener added.
 
