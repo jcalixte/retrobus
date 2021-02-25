@@ -155,7 +155,10 @@ describe('event bus', () => {
   it('removes event bus on call the return callback', () => {
     const callback = jest.fn()
 
-    const unsubscribe = addEventBusListener('on-test-remove-with-callback', callback)
+    const unsubscribe = addEventBusListener(
+      'on-test-remove-with-callback',
+      callback
+    )
 
     emit('on-test-remove-with-callback')
     unsubscribe()
@@ -172,5 +175,25 @@ describe('event bus', () => {
     emit('on-test-unique')
 
     expect(callback).toHaveBeenCalledTimes(1)
+  })
+
+  it('calls every event emitted from the beginning with retroStrategy to "all"', () => {
+    const callback = jest.fn()
+
+    emit('on-test-retro-strategy-all', { first: true })
+    emit('on-test-retro-strategy-all', { second: true })
+
+    addEventBusListener('on-test-retro-strategy-all', callback, {
+      retro: true,
+      retroStrategy: 'all'
+    })
+
+    expect(callback).toHaveBeenCalledTimes(2)
+    expect(callback).toHaveBeenCalledWith({
+      first: true
+    })
+    expect(callback).toHaveBeenCalledWith({
+      second: true
+    })
   })
 })
