@@ -7,6 +7,17 @@ interface Options {
    */
   retro?: boolean
   /**
+   * Set the strategy on calling previous emitted
+   * events.
+   * If retroStrategy is set to 'all', every emitted
+   * events will be called, from oldest to newest.
+   * If retroStrategy is set to 'last-one', only the
+   * last emitted event will be retractively called.
+   * Default to 'last-one'.
+   * Ignored if retro is false.
+   */
+  retroStrategy?: 'last-one' | 'all'
+  /**
    * Remove the callback right after being called.
    * If `retro` is true and if the event was
    * previously emitted, the callback is directly
@@ -23,11 +34,12 @@ interface Params extends Options {
   callback: Callback
 }
 
-const emittedEvents: Map<string, any[]> = new Map()
+const emittedEvents: Map<string, any[][]> = new Map()
 const eventListeners: Map<string, Params[]> = new Map()
 
 const defaultOptions: Options = {
   retro: false,
+  retroStrategy: 'last-one',
   once: false,
   unique: false
 }
@@ -47,8 +59,24 @@ export const addEventBusListener = (
   const listeners = eventListeners.get(name)
 
   if (options.retro && emittedEvents.has(name)) {
-    const args = emittedEvents.get(name) as any[]
-    callback(...args)
+    const emittedEventArgs = emittedEvents.get(name) as any[][]
+    switch (options.retroStrategy) {
+      case 'all': {
+        for (const args of emittedEventArgs) {
+          callback(...args)
+        }
+        break
+      }
+      case 'last-one':
+      default: {
+        const args = emittedEventArgs[emittedEventArgs.length - 1]
+
+        if (args) {
+          callback(...args)
+        }
+        break
+      }
+    }
 
     if (options.once) {
       return unsubscribe
@@ -109,7 +137,12 @@ export const clearEventBusListeners = (name?: string) => {
 export const emit = (name: string, ...args: any[]) => {
   const listeners = eventListeners.get(name)
 
-  emittedEvents.set(name, args)
+  if (emittedEvents.has(name)) {
+    const emittedEventArgs = emittedEvents.get(name) as any[][]
+    emittedEvents.set(name, [...emittedEventArgs, args])
+  } else {
+    emittedEvents.set(name, [args])
+  }
 
   if (!listeners) {
     return
