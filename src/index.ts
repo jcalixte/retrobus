@@ -153,6 +153,11 @@ export const emit = <T extends any>(name: string, ...args: T[]) => {
   )
 }
 
+/**
+ * Create an event bus to type listeners' payload
+ * as the same as emit method's payload.
+ * @param event event name
+ */
 export const createEventBus = <T>(event: string) => {
   return {
     emit: (payload: T) => emit<T>(event, payload),

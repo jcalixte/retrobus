@@ -122,6 +122,20 @@ clearEventBusListeners('authenticated')
 clearEventBusListeners() // clear all event listeners
 ```
 
+## Create an event bus
+
+```ts
+import { createEventBus } from 'retrobus'
+
+const eventBus = createEventBus<{ a: string; b: string }>('authentication')
+
+eventBus.addEventBusListener((payload) => {
+  console.log(payload.a, payload.b)
+})
+
+eventBus.emit({ a: 'Hello', b: 'World' })
+```
+
 ## Add event listener examples with framework
 
 ### VueJS
