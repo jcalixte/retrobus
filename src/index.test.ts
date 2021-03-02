@@ -222,4 +222,17 @@ describe('event bus', () => {
 
     expect(callback).toHaveBeenCalledWith(true)
   })
+
+  it('creates a eventBus and clears listeners', () => {
+    const callback = jest.fn()
+    const eventBus = createEventBus<boolean>('create-event-bus-clear')
+
+    eventBus.addEventBusListener(callback)
+
+    eventBus.clearEventBusListeners()
+
+    eventBus.emit(true)
+
+    expect(callback).not.toHaveBeenCalled()
+  })
 })
