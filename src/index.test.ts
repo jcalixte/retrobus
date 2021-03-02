@@ -1,6 +1,7 @@
 import {
   addEventBusListener,
   clearEventBusListeners,
+  createEventBus,
   emit,
   removeEventBusListener
 } from './index'
@@ -209,5 +210,16 @@ describe('event bus', () => {
     expect(callback).toHaveBeenCalledWith({
       second: true
     })
+  })
+
+  it('creates a eventBus who links emit and listeners', () => {
+    const callback = jest.fn()
+    const eventBus = createEventBus<boolean>('create-event-bus')
+
+    eventBus.addEventBusListener(callback)
+
+    eventBus.emit(true)
+
+    expect(callback).toHaveBeenCalledWith(true)
   })
 })

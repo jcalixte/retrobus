@@ -132,7 +132,7 @@ export const clearEventBusListeners = (name?: string) => {
  * @param name name of the event to emit.
  * @param]} args arguments to be passed to all listeners.
  */
-export const emit = (name: string, ...args: any[]) => {
+export const emit = <T extends any>(name: string, ...args: T[]) => {
   const listeners = eventListeners.get(name)
 
   if (emittedEvents.has(name)) {
@@ -151,4 +151,13 @@ export const emit = (name: string, ...args: any[]) => {
     name,
     listeners.filter((call) => !call.once)
   )
+}
+
+export const createEventBus = <T>(event: string) => {
+  return {
+    emit: (payload: T) => emit<T>(event, payload),
+    addEventBusListener: (callback: (payload: T) => void, options?: Options) =>
+      addEventBusListener(event, callback, options),
+    clearEventBusListeners: () => clearEventBusListeners(event)
+  }
 }
