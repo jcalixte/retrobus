@@ -136,6 +136,36 @@ eventBus.addEventBusListener((payload) => {
 eventBus.emit({ a: 'Hello', b: 'World' })
 ```
 
+## event name can be defined with strings or Symbols
+
+These 2 implementations work:
+
+```ts
+import { createEventBus } from 'retrobus'
+
+const eventBus = createEventBus<{ a: string; b: string }>() // default to Symbol()
+
+eventBus.addEventBusListener((payload) => {
+  console.log(payload.a, payload.b)
+})
+
+eventBus.emit({ a: 'Hello', b: 'World' })
+```
+
+```ts
+import { createEventBus } from 'retrobus'
+
+const eventName = Symbol('authentication')
+
+const eventBus = createEventBus<{ a: string; b: string }>(eventName)
+
+eventBus.addEventBusListener((payload) => {
+  console.log(payload.a, payload.b)
+})
+
+eventBus.emit({ a: 'Hello', b: 'World' })
+```
+
 ## Add event listener examples with framework
 
 ### VueJS
