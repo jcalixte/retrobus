@@ -24,6 +24,37 @@ describe('event bus', () => {
     expect(callback2).toHaveBeenCalled()
   })
 
+  it('calls a callback listener with a symbol', () => {
+    const callback1 = jest.fn()
+    const callback2 = jest.fn()
+
+    const eventName = Symbol('on-test-callback-listener')
+
+    addEventBusListener(eventName, callback1)
+    addEventBusListener(eventName, callback2)
+
+    emit(eventName)
+
+    expect(callback1).toHaveBeenCalled()
+    expect(callback2).toHaveBeenCalled()
+  })
+
+  it('calls a callback listener distinguished by symbols', () => {
+    const callback1 = jest.fn()
+    const callback2 = jest.fn()
+
+    const eventName1 = Symbol()
+    const eventName2 = Symbol()
+
+    addEventBusListener(eventName1, callback1)
+    addEventBusListener(eventName2, callback2)
+
+    emit(eventName1)
+
+    expect(callback1).toHaveBeenCalled()
+    expect(callback2).not.toHaveBeenCalled()
+  })
+
   it('calls a callback listener with args', () => {
     const callback = jest.fn()
     const args = [1, 'test', true]
@@ -221,6 +252,41 @@ describe('event bus', () => {
     eventBus.emit(true)
 
     expect(callback).toHaveBeenCalledWith(true)
+  })
+
+  it('creates a eventBus who links emit and listeners with no event name', () => {
+    const callback = jest.fn()
+    const eventBus = createEventBus<boolean>()
+
+    eventBus.addEventBusListener(callback)
+
+    eventBus.emit(true)
+
+    expect(callback).toHaveBeenCalledWith(true)
+  })
+
+  it('creates a eventBus who links emit and listeners with a symbol', () => {
+    const callback = jest.fn()
+    const eventBus = createEventBus<boolean>()
+
+    eventBus.addEventBusListener(callback)
+
+    eventBus.emit(true)
+
+    expect(callback).toHaveBeenCalledWith(true)
+  })
+
+  it('creates a eventBus who links emit and listeners with a unique symbol', () => {
+    const callback = jest.fn()
+    const eventBus = createEventBus<boolean>()
+    const eventBusCopy = createEventBus<boolean>()
+
+    eventBus.addEventBusListener(callback)
+
+    eventBus.emit(true)
+    eventBusCopy.emit(true)
+
+    expect(callback).toHaveBeenCalledTimes(1)
   })
 
   it('creates a eventBus and clears listeners', () => {

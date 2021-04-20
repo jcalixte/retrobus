@@ -34,8 +34,8 @@ interface Params extends Options {
   callback: Callback
 }
 
-const emittedEvents: Map<string, any[][]> = new Map()
-const eventListeners: Map<string, Params[]> = new Map()
+const emittedEvents: Map<string | Symbol, any[][]> = new Map()
+const eventListeners: Map<string | Symbol, Params[]> = new Map()
 
 const defaultOptions: Options = {
   retro: false,
@@ -51,7 +51,7 @@ const defaultOptions: Options = {
  * @param options option parameters to change callback behavior
  */
 export const addEventBusListener = (
-  name: string,
+  name: string | Symbol,
   callback: Callback,
   options: Options = defaultOptions
 ): (() => void) => {
@@ -102,7 +102,10 @@ export const addEventBusListener = (
  * @param name name of the event.
  * @param callback callback you don't want anymore to trigger when event is emitted.
  */
-export const removeEventBusListener = (name: string, callback: Callback) => {
+export const removeEventBusListener = (
+  name: string | Symbol,
+  callback: Callback
+) => {
   const calls = eventListeners.get(name)
 
   if (!calls) {
@@ -119,7 +122,7 @@ export const removeEventBusListener = (name: string, callback: Callback) => {
  * Clear all listeners from an event.
  * @param name event name to clear all its listeners.
  */
-export const clearEventBusListeners = (name?: string) => {
+export const clearEventBusListeners = (name?: string | Symbol) => {
   if (name === undefined) {
     eventListeners.clear()
     return
@@ -132,7 +135,7 @@ export const clearEventBusListeners = (name?: string) => {
  * @param name name of the event to emit.
  * @param]} args arguments to be passed to all listeners.
  */
-export const emit = <T extends any>(name: string, ...args: T[]) => {
+export const emit = <T extends any>(name: string | Symbol, ...args: T[]) => {
   const listeners = eventListeners.get(name)
 
   if (emittedEvents.has(name)) {
@@ -158,7 +161,7 @@ export const emit = <T extends any>(name: string, ...args: T[]) => {
  * as the same as emit method's payload.
  * @param event event name
  */
-export const createEventBus = <T>(event: string) => {
+export const createEventBus = <T>(event: string | Symbol = Symbol()) => {
   return {
     emit: (payload: T) => emit<T>(event, payload),
     addEventBusListener: (callback: (payload: T) => void, options?: Options) =>
