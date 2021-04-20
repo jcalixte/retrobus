@@ -243,7 +243,7 @@ describe('event bus', () => {
     })
   })
 
-  it('creates a eventBus who links emit and listeners', () => {
+  it('creates an eventBus who links emit and listeners', () => {
     const callback = jest.fn()
     const eventBus = createEventBus<boolean>('create-event-bus')
 
@@ -254,7 +254,7 @@ describe('event bus', () => {
     expect(callback).toHaveBeenCalledWith(true)
   })
 
-  it('creates a eventBus who links emit and listeners with no event name', () => {
+  it('creates an eventBus who links emit and listeners with no event name', () => {
     const callback = jest.fn()
     const eventBus = createEventBus<boolean>()
 
@@ -265,7 +265,7 @@ describe('event bus', () => {
     expect(callback).toHaveBeenCalledWith(true)
   })
 
-  it('creates a eventBus who links emit and listeners with a symbol', () => {
+  it('creates an eventBus who links emit and listeners with a symbol', () => {
     const callback = jest.fn()
     const eventBus = createEventBus<boolean>()
 
@@ -276,7 +276,7 @@ describe('event bus', () => {
     expect(callback).toHaveBeenCalledWith(true)
   })
 
-  it('creates a eventBus who links emit and listeners with a unique symbol', () => {
+  it('creates an eventBus who links emit and listeners with a unique symbol', () => {
     const callback = jest.fn()
     const eventBus = createEventBus<boolean>()
     const eventBusCopy = createEventBus<boolean>()
@@ -289,7 +289,7 @@ describe('event bus', () => {
     expect(callback).toHaveBeenCalledTimes(1)
   })
 
-  it('creates a eventBus and clears listeners', () => {
+  it('creates an eventBus and clears listeners', () => {
     const callback = jest.fn()
     const eventBus = createEventBus<boolean>('create-event-bus-clear')
 
