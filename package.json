@@ -10,10 +10,10 @@
   "license": "MIT",
   "private": false,
   "scripts": {
-    "test": "jest",
-    "test:coverage": "jest --coverage && rm -rf coverage",
-    "test:watch": "jest --watch",
-    "coveralls": "jest --coverage && coveralls < coverage/lcov.info && rm -rf coverage",
+    "test": "vitest",
+    "test:coverage": "vitest --coverage && rm -rf coverage",
+    "test:watch": "vitest --watch",
+    "coveralls": "vitest --coverage && coveralls < coverage/lcov.info && rm -rf coverage",
     "lint": "prettier --write .",
     "prepare": "tsc -p tsconfig.json && tsc -p tsconfig-cjs.json",
     "release": "release-it"
@@ -22,14 +22,12 @@
     "@babel/core": "^7.10.5",
     "@babel/preset-env": "^7.10.4",
     "@babel/preset-typescript": "^7.10.4",
-    "@types/jest": "^26.0.7",
     "@types/node": "^14.0.26",
-    "babel-jest": "^26.1.0",
     "coveralls": "^3.1.0",
-    "jest": "^26.1.0",
     "prettier": "2.0.5",
     "release-it": "^13.6.6",
-    "typescript": "^3.9.7"
+    "typescript": "^3.9.7",
+    "vitest": "^0.8.2"
   },
   "keywords": [
     "event",

@@ -1,3 +1,5 @@
+import { describe, beforeEach, it, expect, vi } from 'vitest'
+
 import {
   addEventBusListener,
   clearEventBusListeners,
@@ -12,8 +14,8 @@ describe('event bus', () => {
   })
 
   it('calls a callback listener', () => {
-    const callback1 = jest.fn()
-    const callback2 = jest.fn()
+    const callback1 = vi.fn()
+    const callback2 = vi.fn()
 
     addEventBusListener('on-test-callback-listener', callback1)
     addEventBusListener('on-test-callback-listener', callback2)
@@ -25,8 +27,8 @@ describe('event bus', () => {
   })
 
   it('calls a callback listener with a symbol', () => {
-    const callback1 = jest.fn()
-    const callback2 = jest.fn()
+    const callback1 = vi.fn()
+    const callback2 = vi.fn()
 
     const eventName = Symbol('on-test-callback-listener')
 
@@ -40,8 +42,8 @@ describe('event bus', () => {
   })
 
   it('calls a callback listener distinguished by symbols', () => {
-    const callback1 = jest.fn()
-    const callback2 = jest.fn()
+    const callback1 = vi.fn()
+    const callback2 = vi.fn()
 
     const eventName1 = Symbol()
     const eventName2 = Symbol()
@@ -56,7 +58,7 @@ describe('event bus', () => {
   })
 
   it('calls a callback listener with args', () => {
-    const callback = jest.fn()
+    const callback = vi.fn()
     const args = [1, 'test', true]
     addEventBusListener('on-test-callback-listener-with-args', callback)
     emit('on-test-callback-listener-with-args', ...args)
@@ -65,7 +67,7 @@ describe('event bus', () => {
   })
 
   it("doesn't call a callback if the listener is added too late", () => {
-    const callback = jest.fn()
+    const callback = vi.fn()
 
     emit('on-test-too-late')
 
@@ -75,7 +77,7 @@ describe('event bus', () => {
   })
 
   it('calls a callback retroactively if the listener is added too late', () => {
-    const callback = jest.fn()
+    const callback = vi.fn()
 
     emit('on-test-retro-too-late', 1234567)
 
@@ -87,7 +89,7 @@ describe('event bus', () => {
   })
 
   it('calls a callback retroactively if the listener is added too late without args', () => {
-    const callback = jest.fn()
+    const callback = vi.fn()
 
     emit('on-test-retro-too-late-without-args')
 
@@ -99,7 +101,7 @@ describe('event bus', () => {
   })
 
   it('calls a callback multiple times', () => {
-    const callback = jest.fn()
+    const callback = vi.fn()
 
     emit('on-test-multiple-times')
 
@@ -114,7 +116,7 @@ describe('event bus', () => {
   })
 
   it('calls a one time callback only once', () => {
-    const callback = jest.fn()
+    const callback = vi.fn()
 
     addEventBusListener('on-test-once', callback, {
       once: true
@@ -127,7 +129,7 @@ describe('event bus', () => {
   })
 
   it('calls a one time callback retroactively only once', () => {
-    const callback = jest.fn()
+    const callback = vi.fn()
 
     emit('on-test-retro-once')
 
@@ -142,7 +144,7 @@ describe('event bus', () => {
   })
 
   it('does nothing when removing before adding', () => {
-    const callback = jest.fn()
+    const callback = vi.fn()
     removeEventBusListener('on-test-remove-before-add', callback)
 
     addEventBusListener('on-test-remove-before-add', callback)
@@ -156,7 +158,7 @@ describe('event bus', () => {
   })
 
   it('removes the listening callback', () => {
-    const callback = jest.fn()
+    const callback = vi.fn()
 
     addEventBusListener('on-test-remove-callback', callback)
 
@@ -169,7 +171,7 @@ describe('event bus', () => {
   })
 
   it('clears listeners', () => {
-    const callback = jest.fn()
+    const callback = vi.fn()
 
     addEventBusListener('on-test-clear-listeners', callback)
 
@@ -181,8 +183,8 @@ describe('event bus', () => {
   })
 
   it('clears everything', () => {
-    const callback1 = jest.fn()
-    const callback2 = jest.fn()
+    const callback1 = vi.fn()
+    const callback2 = vi.fn()
 
     addEventBusListener('on-test-1', callback1)
     addEventBusListener('on-test-2', callback2)
@@ -197,7 +199,7 @@ describe('event bus', () => {
   })
 
   it('removes event bus on call the return callback', () => {
-    const callback = jest.fn()
+    const callback = vi.fn()
 
     const unsubscribe = addEventBusListener(
       'on-test-remove-with-callback',
@@ -211,7 +213,7 @@ describe('event bus', () => {
   })
 
   it('calls only once a unique callback', () => {
-    const callback = jest.fn()
+    const callback = vi.fn()
 
     addEventBusListener('on-test-unique', callback, { unique: true })
     addEventBusListener('on-test-unique', callback, { unique: true })
@@ -222,7 +224,7 @@ describe('event bus', () => {
   })
 
   it('calls every event emitted from the beginning with retroStrategy to "all"', () => {
-    const callback = jest.fn()
+    const callback = vi.fn()
 
     emit('on-test-retro-strategy-all')
     emit('on-test-retro-strategy-all', { first: true })
@@ -244,7 +246,7 @@ describe('event bus', () => {
   })
 
   it('creates an eventBus who links emit and listeners', () => {
-    const callback = jest.fn()
+    const callback = vi.fn()
     const eventBus = createEventBus<boolean>('create-event-bus')
 
     eventBus.addEventBusListener(callback)
@@ -255,7 +257,7 @@ describe('event bus', () => {
   })
 
   it('creates an eventBus who links emit and listeners with no event name', () => {
-    const callback = jest.fn()
+    const callback = vi.fn()
     const eventBus = createEventBus<boolean>()
 
     eventBus.addEventBusListener(callback)
@@ -266,7 +268,7 @@ describe('event bus', () => {
   })
 
   it('creates an eventBus who links emit and listeners with a symbol', () => {
-    const callback = jest.fn()
+    const callback = vi.fn()
     const eventBus = createEventBus<boolean>()
 
     eventBus.addEventBusListener(callback)
@@ -277,7 +279,7 @@ describe('event bus', () => {
   })
 
   it('creates an eventBus who links emit and listeners with a unique symbol', () => {
-    const callback = jest.fn()
+    const callback = vi.fn()
     const eventBus = createEventBus<boolean>()
     const eventBusCopy = createEventBus<boolean>()
 
@@ -290,7 +292,7 @@ describe('event bus', () => {
   })
 
   it('creates an eventBus and clears listeners', () => {
-    const callback = jest.fn()
+    const callback = vi.fn()
     const eventBus = createEventBus<boolean>('create-event-bus-clear')
 
     eventBus.addEventBusListener(callback)
