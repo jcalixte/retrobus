@@ -37,6 +37,12 @@ yarn:
 yarn add retrobus
 ```
 
+pnpm:
+
+```sh
+pnpm add retrobus
+```
+
 # Usage
 
 `Retrobus` implements 4 methods:
