@@ -133,7 +133,7 @@ export const clearEventBusListeners = (name?: string | Symbol) => {
 /**
  * Emit an event.
  * @param name name of the event to emit.
- * @param]} args arguments to be passed to all listeners.
+ * @param args arguments to be passed to all listeners.
  */
 export const emit = <T extends any>(name: string | Symbol, ...args: T[]) => {
   const listeners = eventListeners.get(name)
@@ -157,6 +157,19 @@ export const emit = <T extends any>(name: string | Symbol, ...args: T[]) => {
 }
 
 /**
+ * Clear all emitted events.
+ * @param name event name.
+ */
+export const clearEmittedEvents = (name?: string | Symbol) => {
+  if (name === undefined) {
+    emittedEvents.clear()
+    return
+  }
+
+  emittedEvents.delete(name)
+}
+
+/**
  * Create an event bus to type listeners' payload
  * as the same as emit method's payload.
  * @param event event name
@@ -164,6 +177,7 @@ export const emit = <T extends any>(name: string | Symbol, ...args: T[]) => {
 export const createEventBus = <T>(event: string | Symbol = Symbol()) => {
   return {
     emit: (payload: T) => emit<T>(event, payload),
+    clearEmittedEvents: () => clearEmittedEvents(event),
     addEventBusListener: (callback: (payload: T) => void, options?: Options) =>
       addEventBusListener(event, callback, options),
     clearEventBusListeners: () => clearEventBusListeners(event)

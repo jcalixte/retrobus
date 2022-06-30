@@ -2,6 +2,7 @@ import { describe, beforeEach, it, expect, vi } from 'vitest'
 
 import {
   addEventBusListener,
+  clearEmittedEvents,
   clearEventBusListeners,
   createEventBus,
   emit,
@@ -245,6 +246,49 @@ describe('event bus', () => {
     })
   })
 
+  it('clear emitted events', () => {
+    const callback = vi.fn()
+
+    emit('event to be cleared')
+
+    clearEmittedEvents('event to be cleared')
+
+    addEventBusListener('event to be cleared', callback, {
+      retro: true
+    })
+
+    expect(callback).toHaveBeenCalledTimes(0)
+  })
+
+  it('clear all emitted events', () => {
+    const callback1 = vi.fn()
+    const callback2 = vi.fn()
+
+    emit('event 1')
+    emit('event 2')
+
+    clearEmittedEvents()
+
+    addEventBusListener('event 1', callback1, {
+      retro: true
+    })
+
+    addEventBusListener('event 2', callback2, {
+      retro: true
+    })
+
+    expect(callback1).not.toHaveBeenCalled()
+    expect(callback2).not.toHaveBeenCalled()
+
+    emit('event 1')
+    emit('event 2')
+
+    expect(callback1).toHaveBeenCalledOnce()
+    expect(callback2).toHaveBeenCalledOnce()
+  })
+})
+
+describe('with `create event bus`', () => {
   it('creates an eventBus who links emit and listeners', () => {
     const callback = vi.fn()
     const eventBus = createEventBus<boolean>('create-event-bus')
@@ -288,7 +332,7 @@ describe('event bus', () => {
     eventBus.emit(true)
     eventBusCopy.emit(true)
 
-    expect(callback).toHaveBeenCalledTimes(1)
+    expect(callback).toHaveBeenCalledOnce()
   })
 
   it('creates an eventBus and clears listeners', () => {
@@ -302,5 +346,24 @@ describe('event bus', () => {
     eventBus.emit(true)
 
     expect(callback).not.toHaveBeenCalled()
+  })
+
+  it('clear emitted events', () => {
+    const callback = vi.fn()
+    const eventBus = createEventBus<void>()
+
+    eventBus.emit()
+
+    eventBus.clearEmittedEvents()
+
+    eventBus.addEventBusListener(callback, {
+      retro: true
+    })
+
+    expect(callback).not.toHaveBeenCalled()
+
+    eventBus.emit()
+
+    expect(callback).toHaveBeenCalledOnce()
   })
 })
