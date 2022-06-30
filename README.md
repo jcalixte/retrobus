@@ -128,6 +128,10 @@ clearEventBusListeners('authenticated')
 clearEventBusListeners() // clear all event listeners
 ```
 
+## Clear emitted events
+
+With `clearEmittedEvents(name)`, you can clear all the events from a specific key already emitted. If there is no parameter when calling the function, then all the emitted events are cleared.
+
 ## Create an event bus
 
 ```ts
