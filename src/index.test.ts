@@ -224,7 +224,7 @@ describe('event bus', () => {
     expect(callback).toHaveBeenCalledTimes(1)
   })
 
-  it('calls every event emitted from the beginning with retroStrategy to "all"', () => {
+  it('calls every emitted event from the beginning with retroStrategy to "all"', () => {
     const callback = vi.fn()
 
     emit('on-test-retro-strategy-all')
@@ -244,6 +244,22 @@ describe('event bus', () => {
     expect(callback).toHaveBeenCalledWith({
       second: true
     })
+  })
+
+  it('calls last emitted event with retroStrategy to "last-one"', () => {
+    const callback = vi.fn()
+
+    emit('on-test-retro-strategy-last-one')
+    emit('on-test-retro-strategy-last-one', { first: true })
+    emit('on-test-retro-strategy-last-one', { last: true })
+
+    addEventBusListener('on-test-retro-strategy-last-one', callback, {
+      retro: true,
+      retroStrategy: 'last-one'
+    })
+
+    expect(callback).toHaveBeenCalledOnce()
+    expect(callback).toHaveBeenCalledWith({ last: true })
   })
 
   it('clear emitted events', () => {
