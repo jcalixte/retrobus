@@ -262,7 +262,7 @@ describe('event bus', () => {
     expect(callback).toHaveBeenCalledWith({ last: true })
   })
 
-  it('clear emitted events', () => {
+  it('clears emitted events', () => {
     const callback = vi.fn()
 
     emit('event to be cleared')
@@ -276,7 +276,7 @@ describe('event bus', () => {
     expect(callback).toHaveBeenCalledTimes(0)
   })
 
-  it('clear all emitted events', () => {
+  it('clears all emitted events', () => {
     const callback1 = vi.fn()
     const callback2 = vi.fn()
 
@@ -301,6 +301,28 @@ describe('event bus', () => {
 
     expect(callback1).toHaveBeenCalledOnce()
     expect(callback2).toHaveBeenCalledOnce()
+  })
+
+  it('is limited to 1000 call history per event; removing the first ones', () => {
+    const callback = vi.fn()
+
+    const limit = 1000
+    const offset = 10
+
+    for (let i = 0; i < limit + offset; i++) {
+      emit('call-history-limit', i)
+    }
+
+    addEventBusListener('call-history-limit', callback, {
+      retro: true,
+      retroStrategy: 'all'
+    })
+
+    expect(callback).toHaveBeenCalledTimes(limit)
+
+    for (let i = 0; i < limit; i++) {
+      expect(callback).toHaveBeenCalledWith(i + offset)
+    }
   })
 })
 
@@ -364,7 +386,7 @@ describe('with `create event bus`', () => {
     expect(callback).not.toHaveBeenCalled()
   })
 
-  it('clear emitted events', () => {
+  it('clears emitted events', () => {
     const callback = vi.fn()
     const eventBus = createEventBus<void>()
 

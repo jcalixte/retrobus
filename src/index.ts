@@ -1,5 +1,7 @@
 type Callback = (...args: any[]) => void
 
+const CACHE_EMITTED_EVENT_LIMIT = 1000
+
 interface Options {
   /**
    * Call retroactively the callback if the event
@@ -92,7 +94,7 @@ export const addEventBusListener = (
     return unsubscribe
   }
 
-  eventListeners.set(name, [...listeners, listener])
+  eventListeners.set(name, listeners.concat([listener]))
 
   return unsubscribe
 }
@@ -131,6 +133,22 @@ export const clearEventBusListeners = (name?: string | Symbol) => {
 }
 
 /**
+ * Limit the array of emitted events we want to cache
+ * @param emittedEventArgs emitted event arguments we want to limit
+ * @returns array of limited emitted event arguments
+ */
+const getLimitedHistoryOfEmittedEventArgs = <T>(
+  emittedEventArgs: T[][]
+): T[][] => {
+  if (emittedEventArgs.length > CACHE_EMITTED_EVENT_LIMIT) {
+    const [, ...rest] = emittedEventArgs
+    return getLimitedHistoryOfEmittedEventArgs(rest)
+  }
+
+  return emittedEventArgs
+}
+
+/**
  * Emit an event.
  * @param name name of the event to emit.
  * @param args arguments to be passed to all listeners.
@@ -140,7 +158,10 @@ export const emit = <T extends any>(name: string | Symbol, ...args: T[]) => {
 
   if (emittedEvents.has(name)) {
     const emittedEventArgs = emittedEvents.get(name)!
-    emittedEvents.set(name, [...emittedEventArgs, args])
+    emittedEvents.set(
+      name,
+      getLimitedHistoryOfEmittedEventArgs(emittedEventArgs.concat([args]))
+    )
   } else {
     emittedEvents.set(name, [args])
   }
