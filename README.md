@@ -11,6 +11,7 @@
 
 ![travis](https://img.shields.io/travis/jcalixte/retrobus?style=for-the-badge)
 ![coveralls](https://img.shields.io/coveralls/github/jcalixte/retrobus?style=for-the-badge)
+[![BCH compliance](https://bettercodehub.com/edge/badge/jcalixte/retrobus?branch=main)](https://bettercodehub.com/)
 
 # Retro Bus
 
