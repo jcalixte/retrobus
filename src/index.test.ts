@@ -320,6 +320,10 @@ describe('event bus', () => {
 
     expect(callback).toHaveBeenCalledTimes(limit)
 
+    for (let i = 0; i < offset; i++) {
+      expect(callback).not.toHaveBeenCalledWith(i)
+    }
+
     for (let i = 0; i < limit; i++) {
       expect(callback).toHaveBeenCalledWith(i + offset)
     }
