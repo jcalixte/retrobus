@@ -141,8 +141,7 @@ const getLimitedHistoryOfEmittedEventArgs = <T>(
   emittedEventArgs: T[][]
 ): T[][] => {
   if (emittedEventArgs.length > CACHE_EMITTED_EVENT_LIMIT) {
-    const [, ...rest] = emittedEventArgs
-    return getLimitedHistoryOfEmittedEventArgs(rest)
+    return [...emittedEventArgs.slice(-CACHE_EMITTED_EVENT_LIMIT)]
   }
 
   return emittedEventArgs
