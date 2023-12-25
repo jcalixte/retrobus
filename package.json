@@ -1,6 +1,6 @@
 {
   "name": "retrobus",
-  "version": "1.9.2",
+  "version": "1.9.3",
   "description": "An event bus that allows listeners to be retroactive",
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.js",
