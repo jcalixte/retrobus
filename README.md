@@ -7,8 +7,6 @@
 ![npm](https://img.shields.io/npm/v/retrobus?style=for-the-badge)
 ![npm](https://img.shields.io/npm/dm/retrobus?style=for-the-badge)
 
-![coveralls](https://img.shields.io/coveralls/github/jcalixte/retrobus?style=for-the-badge)
-
 # Retro Bus
 
 `Retrobus` is a simple event bus for your JavaScript/TypeScript application.
