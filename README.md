@@ -257,4 +257,4 @@ export class ContentComponent implements OnDestroy {
 
 ## Credits
 
-Logo created with [Tabler Icons](https://tablericons.com/).
+Logo created with [Tabler Icons](https://tabler.io/icons/).
