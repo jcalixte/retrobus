@@ -36,8 +36,8 @@ interface Params extends Options {
   callback: Callback
 }
 
-const emittedEvents: Map<string | Symbol, any[][]> = new Map()
-const eventListeners: Map<string | Symbol, Params[]> = new Map()
+const emittedEvents: Map<string | symbol, any[][]> = new Map()
+const eventListeners: Map<string | symbol, Params[]> = new Map()
 
 const defaultOptions: Options = {
   retro: false,
@@ -53,16 +53,17 @@ const defaultOptions: Options = {
  * @param options option parameters to change callback behavior
  */
 export const addEventBusListener = (
-  name: string | Symbol,
+  name: string | symbol,
   callback: Callback,
-  options: Options = defaultOptions
+  options: Options = {}
 ): (() => void) => {
+  const opts = { ...defaultOptions, ...options }
   const unsubscribe = () => removeEventBusListener(name, callback)
   const listeners = eventListeners.get(name)
 
-  if (options.retro && emittedEvents.has(name)) {
+  if (opts.retro && emittedEvents.has(name)) {
     const emittedEventArgs = emittedEvents.get(name)!
-    switch (options.retroStrategy) {
+    switch (opts.retroStrategy) {
       case 'all': {
         for (const args of emittedEventArgs) {
           callback(...args)
@@ -78,19 +79,19 @@ export const addEventBusListener = (
       }
     }
 
-    if (options.once) {
+    if (opts.once) {
       return unsubscribe
     }
   }
 
-  const listener = { callback, ...options }
+  const listener = { callback, ...opts }
 
   if (!listeners) {
     eventListeners.set(name, [listener])
     return unsubscribe
   }
 
-  if (options.unique && listeners.find((c) => c.callback === callback)) {
+  if (opts.unique && listeners.find((c) => c.callback === callback)) {
     return unsubscribe
   }
 
@@ -105,7 +106,7 @@ export const addEventBusListener = (
  * @param callback callback you don't want anymore to trigger when event is emitted.
  */
 export const removeEventBusListener = (
-  name: string | Symbol,
+  name: string | symbol,
   callback: Callback
 ) => {
   const calls = eventListeners.get(name)
@@ -124,7 +125,7 @@ export const removeEventBusListener = (
  * Clear all listeners from an event.
  * @param name event name to clear all its listeners.
  */
-export const clearEventBusListeners = (name?: string | Symbol) => {
+export const clearEventBusListeners = (name?: string | symbol) => {
   if (name === undefined) {
     eventListeners.clear()
     return
@@ -152,7 +153,7 @@ const getLimitedHistoryOfEmittedEventArgs = <T>(
  * @param name name of the event to emit.
  * @param args arguments to be passed to all listeners.
  */
-export const emit = <T extends any>(name: string | Symbol, ...args: T[]) => {
+export const emit = <T extends any>(name: string | symbol, ...args: T[]) => {
   const listeners = eventListeners.get(name)
 
   if (emittedEvents.has(name)) {
@@ -169,7 +170,13 @@ export const emit = <T extends any>(name: string | Symbol, ...args: T[]) => {
     return
   }
 
-  listeners.map((call) => call.callback(...args))
+  listeners.forEach((call) => {
+    try {
+      call.callback(...args)
+    } catch (error) {
+      console.error(error)
+    }
+  })
   eventListeners.set(
     name,
     listeners.filter((call) => !call.once)
@@ -180,7 +187,7 @@ export const emit = <T extends any>(name: string | Symbol, ...args: T[]) => {
  * Clear all emitted events.
  * @param name event name.
  */
-export const clearEmittedEvents = (name?: string | Symbol) => {
+export const clearEmittedEvents = (name?: string | symbol) => {
   if (name === undefined) {
     emittedEvents.clear()
     return
@@ -194,12 +201,14 @@ export const clearEmittedEvents = (name?: string | Symbol) => {
  * as the same as emit method's payload.
  * @param event event name
  */
-export const createEventBus = <T>(event: string | Symbol = Symbol()) => {
+export const createEventBus = <T>(event: string | symbol = Symbol()) => {
   return {
     emit: (payload: T) => emit<T>(event, payload),
     clearEmittedEvents: () => clearEmittedEvents(event),
     addEventBusListener: (callback: (payload: T) => void, options?: Options) =>
       addEventBusListener(event, callback, options),
+    removeEventBusListener: (callback: (payload: T) => void) =>
+      removeEventBusListener(event, callback),
     clearEventBusListeners: () => clearEventBusListeners(event)
   }
 }

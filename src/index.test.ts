@@ -408,4 +408,102 @@ describe('with `create event bus`', () => {
 
     expect(callback).toHaveBeenCalledOnce()
   })
+
+  it('removes a specific listener', () => {
+    const callback1 = vi.fn()
+    const callback2 = vi.fn()
+    const eventBus = createEventBus<boolean>()
+
+    eventBus.addEventBusListener(callback1)
+    eventBus.addEventBusListener(callback2)
+
+    eventBus.removeEventBusListener(callback1)
+
+    eventBus.emit(true)
+
+    expect(callback1).not.toHaveBeenCalled()
+    expect(callback2).toHaveBeenCalledWith(true)
+  })
+})
+
+describe('default options merging', () => {
+  beforeEach(() => {
+    clearEventBusListeners()
+    clearEmittedEvents()
+  })
+
+  it('applies default retroStrategy when only retro is provided', () => {
+    const callback = vi.fn()
+
+    emit('on-test-partial-options', 'first')
+    emit('on-test-partial-options', 'second')
+
+    addEventBusListener('on-test-partial-options', callback, {
+      retro: true
+    })
+
+    // retroStrategy defaults to 'last-one', so only the last event is replayed
+    expect(callback).toHaveBeenCalledOnce()
+    expect(callback).toHaveBeenCalledWith('second')
+  })
+
+  it('applies default once when only retro is provided', () => {
+    const callback = vi.fn()
+
+    emit('on-test-partial-once')
+
+    addEventBusListener('on-test-partial-once', callback, {
+      retro: true
+    })
+
+    emit('on-test-partial-once')
+
+    // once defaults to false, so callback should be called again
+    expect(callback).toHaveBeenCalledTimes(2)
+  })
+})
+
+describe('error isolation', () => {
+  beforeEach(() => {
+    clearEventBusListeners()
+  })
+
+  it('continues calling listeners when one throws', () => {
+    const errorCallback = vi.fn(() => {
+      throw new Error('listener error')
+    })
+    const callback = vi.fn()
+
+    addEventBusListener('on-test-error', errorCallback)
+    addEventBusListener('on-test-error', callback)
+
+    const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {})
+
+    emit('on-test-error')
+
+    expect(errorCallback).toHaveBeenCalled()
+    expect(callback).toHaveBeenCalled()
+    expect(consoleSpy).toHaveBeenCalledWith(expect.any(Error))
+
+    consoleSpy.mockRestore()
+  })
+
+  it('cleans up once listeners even when a listener throws', () => {
+    const errorCallback = vi.fn(() => {
+      throw new Error('listener error')
+    })
+    const onceCallback = vi.fn()
+
+    addEventBusListener('on-test-error-once', errorCallback)
+    addEventBusListener('on-test-error-once', onceCallback, { once: true })
+
+    const consoleSpy = vi.spyOn(console, 'error').mockImplementation(() => {})
+
+    emit('on-test-error-once')
+    emit('on-test-error-once')
+
+    expect(onceCallback).toHaveBeenCalledTimes(1)
+
+    consoleSpy.mockRestore()
+  })
 })
