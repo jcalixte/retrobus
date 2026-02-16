@@ -7,7 +7,7 @@
   "type": "module",
   "types": "dist/esm/index.d.ts",
   "repository": "https://github.com/jcalixte/retrobus",
-  "author": "Julien Calixte <julienc@bam.tech>",
+  "author": "Julien Calixte <julien.calixte@theodo.com>",
   "license": "MIT",
   "private": false,
   "scripts": {
